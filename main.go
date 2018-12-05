@@ -10,22 +10,23 @@ import (
 
 // POSTリクエストに対する処理
 func postJsonHandler(rw http.ResponseWriter, req *http.Request) {
-	// リクエストの設定
+	// ヘッダーの設定
 	rw.Header().Set("Content-Type", "application/json")
 
-	// メソッドがPOST確認
+	// メソッドがPOSTかどうかを確認
 	if req.Method != "POST" {
 		fmt.Fprint(rw, "Method Not POST.")
 		return
 	}
 
+	// データの取得
 	body, err := ioutil.ReadAll(req.Body)
 	if err != nil {
 		fmt.Fprint(rw, err.Error())
 		return
 	}
 
-	// データの取得
+	// データの代入
 	var input goMySql.User
 	err = json.Unmarshal(body, &input)
 	if err != nil {
@@ -45,7 +46,7 @@ func postJsonHandler(rw http.ResponseWriter, req *http.Request) {
 
 // GETリクエストに対する処理
 func getJsonHandler(rw http.ResponseWriter, req *http.Request) {
-	// リクエストの設定
+	// ヘッダーの設定
 	rw.Header().Set("Content-Type", "application/json")
 
 	// DBからデータを取得
@@ -66,6 +67,6 @@ func main() {
 	// ハンドラの設定
 	http.HandleFunc("/post", postJsonHandler)
 	http.HandleFunc("/get", getJsonHandler)
-	// port8080で受け付ける
+	// port9999で受け付ける
 	http.ListenAndServe(":9999", nil)
 }
